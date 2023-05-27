@@ -46,7 +46,11 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item save(Item item) {
-        return jpaRepository.save(ItemEntity.fromDomain(item)).toDomain();
+
+        ItemEntity itemEntity = ItemEntity.fromDomain(item);
+        itemEntity.setProduct(jpaProductRepository.findById(item.getProductId()).get());
+
+        return jpaRepository.save(itemEntity).toDomain();
     }
 
     @Override

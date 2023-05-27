@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.stream.Collectors;
 
 @Entity(name = "Item")
-@ToString
+@ToString(exclude = "product")
 @Getter
 @Setter
 @EqualsAndHashCode

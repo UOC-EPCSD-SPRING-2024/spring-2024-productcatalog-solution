@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity(name = "Product")
-@ToString
+@ToString(exclude = "itemList")
 @Getter
 @Setter
 @EqualsAndHashCode

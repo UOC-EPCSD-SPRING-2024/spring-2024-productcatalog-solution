@@ -51,13 +51,18 @@ public class ItemServiceImpl implements ItemService {
 
     public Item setOperational(String serialNumber, boolean operational) {
 
-        Item item = findBySerialNumber(serialNumber).orElseThrow(IllegalArgumentException::new);
-        item.setStatus(operational ? ItemStatus.OPERATIONAL : ItemStatus.NON_OPERATIONAL);
-        item = itemRepository.save(item);
+        ItemStatus newStatus = operational ? ItemStatus.OPERATIONAL : ItemStatus.NON_OPERATIONAL;
 
-        // if a unit became operational, alert the interested users
-        if (operational) {
-            productKafkaTemplate.send(KafkaConstants.PRODUCT_TOPIC + KafkaConstants.SEPARATOR + KafkaConstants.UNIT_AVAILABLE, ProductMessage.builder().productId(item.getProductId()).build());
+        Item item = itemRepository.findBySerialNumber(serialNumber).orElseThrow(IllegalArgumentException::new);
+
+        if (item.getStatus() != newStatus) {
+            item.setStatus(newStatus);
+            item = itemRepository.save(item);
+
+            // if a unit became operational, alert the interested users
+            if (operational) {
+                productKafkaTemplate.send(KafkaConstants.PRODUCT_TOPIC + KafkaConstants.SEPARATOR + KafkaConstants.UNIT_AVAILABLE, ProductMessage.builder().productId(item.getProductId()).build());
+            }
         }
 
         return item;
