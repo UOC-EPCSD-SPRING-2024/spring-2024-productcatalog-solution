@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity(name = "Product")
 @ToString(exclude = "itemList")

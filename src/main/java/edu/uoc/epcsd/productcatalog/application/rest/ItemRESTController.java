@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
@@ -36,7 +38,7 @@ public class ItemRESTController {
 
     @GetMapping("/{serialNumber}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Item> getItemById(@PathVariable @NotNull String serialNumber) {
+    public ResponseEntity<Item> getItemById(@PathVariable @NotBlank String serialNumber) {
         log.trace("getItemById");
 
         return itemService.findBySerialNumber(serialNumber).map(item -> ResponseEntity.ok().body(item))
@@ -44,7 +46,7 @@ public class ItemRESTController {
     }
 
     @PatchMapping("/{serialNumber}")
-    public ResponseEntity<Item> setOperational(@PathVariable @NotNull String serialNumber, @RequestBody boolean operational) {
+    public ResponseEntity<Item> setOperational(@PathVariable @NotBlank String serialNumber, @RequestBody @NotNull boolean operational) {
 
         try {
             return ResponseEntity.ok().body(itemService.setOperational(serialNumber, operational));
@@ -54,7 +56,7 @@ public class ItemRESTController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createItem(@RequestBody CreateItemRequest createItemRequest) {
+    public ResponseEntity<String> createItem(@RequestBody @NotNull @Valid CreateItemRequest createItemRequest) {
         log.trace("createItem");
 
         try {

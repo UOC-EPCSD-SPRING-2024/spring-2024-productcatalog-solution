@@ -2,9 +2,7 @@ package edu.uoc.epcsd.productcatalog.domain.service;
 
 import edu.uoc.epcsd.productcatalog.domain.Item;
 import edu.uoc.epcsd.productcatalog.domain.ItemStatus;
-import edu.uoc.epcsd.productcatalog.domain.Product;
 import edu.uoc.epcsd.productcatalog.domain.repository.ItemRepository;
-import edu.uoc.epcsd.productcatalog.domain.repository.ProductRepository;
 import edu.uoc.epcsd.productcatalog.infrastructure.kafka.KafkaConstants;
 import edu.uoc.epcsd.productcatalog.infrastructure.kafka.ProductMessage;
 import lombok.RequiredArgsConstructor;

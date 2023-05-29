@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public final class ProductMessage {
-    
+
     private final Long productId;
 
 }

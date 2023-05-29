@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
@@ -60,7 +61,7 @@ public class ProductRESTController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> createProduct(@RequestBody CreateProductRequest createProductRequest) {
+    public ResponseEntity<Long> createProduct(@RequestBody @NotNull @Valid CreateProductRequest createProductRequest) {
         log.trace("createProduct");
 
         log.trace("Creating product " + createProductRequest);

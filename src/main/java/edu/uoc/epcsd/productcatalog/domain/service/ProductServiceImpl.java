@@ -1,7 +1,6 @@
 package edu.uoc.epcsd.productcatalog.domain.service;
 
 import edu.uoc.epcsd.productcatalog.domain.Product;
-import edu.uoc.epcsd.productcatalog.domain.repository.CategoryRepository;
 import edu.uoc.epcsd.productcatalog.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

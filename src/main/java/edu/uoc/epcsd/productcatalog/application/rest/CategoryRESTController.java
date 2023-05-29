@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class CategoryRESTController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Category> findCategoryById(@PathVariable Long id) {
+    public ResponseEntity<Category> findCategoryById(@PathVariable @NotNull Long id) {
         log.info("findCategoryById");
 
         return categoryService.findCategoryById(id).map(category -> ResponseEntity.ok().body(category))
@@ -43,7 +45,7 @@ public class CategoryRESTController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Category>> findCategoriesByCriteria(FindCategoriesCriteria findCategoriesCriteria) {
+    public ResponseEntity<List<Category>> findCategoriesByCriteria(@NotNull FindCategoriesCriteria findCategoriesCriteria) {
         log.trace("findCategoriesByCriteria");
 
         try {
@@ -58,7 +60,7 @@ public class CategoryRESTController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> createCategory(@RequestBody CreateCategoryRequest createCategoryRequest) {
+    public ResponseEntity<Long> createCategory(@RequestBody @NotNull @Valid CreateCategoryRequest createCategoryRequest) {
         log.trace("createCategory");
 
         log.trace("Creating category " + createCategoryRequest);

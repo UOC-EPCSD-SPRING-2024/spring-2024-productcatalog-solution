@@ -2,7 +2,10 @@ package edu.uoc.epcsd.productcatalog.infrastructure.repository.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.uoc.epcsd.productcatalog.domain.Category;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;

@@ -1,12 +1,9 @@
 package edu.uoc.epcsd.productcatalog.infrastructure.repository.jpa;
 
-import edu.uoc.epcsd.productcatalog.domain.Category;
 import edu.uoc.epcsd.productcatalog.domain.Item;
-import edu.uoc.epcsd.productcatalog.domain.Product;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.stream.Collectors;
 
 @Entity(name = "Item")
 @ToString(exclude = "product")

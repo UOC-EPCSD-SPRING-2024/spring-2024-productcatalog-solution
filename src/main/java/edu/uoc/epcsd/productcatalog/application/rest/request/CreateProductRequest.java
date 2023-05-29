@@ -3,24 +3,27 @@ package edu.uoc.epcsd.productcatalog.application.rest.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
 public final class CreateProductRequest {
 
-    @NotNull
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String description;
 
-    @NotNull
+    @NotNull @Min(0)
     private Double dailyPrice;
 
-    @NotNull
+    @NotBlank
     private String brand;
 
-    @NotNull
+    @NotBlank
     private String model;
 
     @NotNull

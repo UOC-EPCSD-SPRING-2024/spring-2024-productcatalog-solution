@@ -3,6 +3,7 @@ package edu.uoc.epcsd.productcatalog.domain;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -16,9 +17,10 @@ public abstract class CatalogElement {
     @NotNull
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String description;
 
 }
