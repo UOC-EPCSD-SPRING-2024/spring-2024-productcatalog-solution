@@ -12,16 +12,14 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -56,5 +54,13 @@ public class OfferRESTController {
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The specified product category " + addOfferRequest.getCategoryId() + " does not exist.", e);
         }
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Offer> findOffersByUser(@RequestParam @NotNull String email) {
+        log.trace("findOffersByUser");
+
+        return offerService.findOffersByUser(email);
     }
 }

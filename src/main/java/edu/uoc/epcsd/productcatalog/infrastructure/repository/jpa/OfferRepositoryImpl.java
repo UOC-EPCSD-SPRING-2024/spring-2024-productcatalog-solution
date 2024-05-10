@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.function.Supplier;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -26,12 +27,17 @@ public class OfferRepositoryImpl implements OfferRepository {
         CategoryEntity category = jpaCategoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException(categoryId));
 
         Long productId = offer.getProductId();
-        ProductEntity product = jpaProductRepository.findById(productId).orElseThrow( () -> new ProductNotFoundException(productId));
+        ProductEntity product = jpaProductRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
 
         OfferEntity offerEntity = OfferEntity.fromDomain(offer);
         offerEntity.setCategory(category);
         offerEntity.setProduct(product);
 
         return jpaRepository.save(offerEntity).getId();
+    }
+
+    @Override
+    public List<Offer> findOffersByUser(String email) {
+        return jpaRepository.findOfferEntitiesByEmail(email).stream().map(OfferEntity::toDomain).collect(Collectors.toList());
     }
 }

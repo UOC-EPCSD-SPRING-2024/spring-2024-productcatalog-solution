@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Service
@@ -38,5 +40,9 @@ public class OfferServiceImpl implements OfferService {
         }
 
         return offerRepository.addOffer(offer);
+    }
+
+    public List<Offer> findOffersByUser(String email) {
+        return offerRepository.findOffersByUser(email);
     }
 }
