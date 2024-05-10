@@ -25,6 +25,8 @@ public class OfferServiceImpl implements OfferService {
     @Value("${userService.getUserByEmail.url}")
     private String getUserByEmail;
 
+    private final ItemService itemService;
+
     private final OfferRepository offerRepository;
 
     public Long addOffer(Offer offer) {
@@ -52,7 +54,13 @@ public class OfferServiceImpl implements OfferService {
         Offer offer = offerRepository.findOfferById(id).orElseThrow(() -> new OfferNotFoundException(id));
         offer.setDate(date);
         offer.setStatus(status);
+
+        if (status.equals(OfferStatus.ACCEPTED)) {
+            itemService.createItem(offer.getProductId(), offer.getSerialNumber());
+        }
+
         offer = offerRepository.save(offer);
+
         return offer;
     }
 }
