@@ -1,10 +1,13 @@
 package edu.uoc.epcsd.productcatalog.infrastructure.repository.jpa;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.uoc.epcsd.productcatalog.domain.Offer;
+import edu.uoc.epcsd.productcatalog.domain.OfferStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity(name = "Offer")
 @Getter
@@ -28,6 +31,14 @@ public class OfferEntity implements DomainTranslatable<Offer> {
     @ManyToOne(optional = false)
     private ProductEntity product;
 
+    @Column(name = "`date`", columnDefinition = "DATE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private OfferStatus status;
+
     @Column(name = "serialNumber", nullable = false, unique = true)
     private String serialNumber;
 
@@ -39,6 +50,8 @@ public class OfferEntity implements DomainTranslatable<Offer> {
         return OfferEntity.builder()
                 .id(offer.getId())
                 .email(offer.getEmail())
+                .date(offer.getDate())
+                .status(offer.getStatus())
                 .serialNumber(offer.getSerialNumber())
                 .build();
     }
@@ -50,6 +63,8 @@ public class OfferEntity implements DomainTranslatable<Offer> {
                 .email(this.getEmail())
                 .categoryId(this.getCategory().getId())
                 .productId(this.getProduct().getId())
+                .date(this.getDate())
+                .status(this.getStatus())
                 .serialNumber(this.getSerialNumber())
                 .build();
     }

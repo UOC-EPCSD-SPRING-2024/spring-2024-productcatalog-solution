@@ -2,11 +2,10 @@ package edu.uoc.epcsd.productcatalog.application.rest;
 
 
 import edu.uoc.epcsd.productcatalog.application.rest.request.AddOfferRequest;
+import edu.uoc.epcsd.productcatalog.application.rest.request.EvaluateOfferRequest;
 import edu.uoc.epcsd.productcatalog.domain.Offer;
-import edu.uoc.epcsd.productcatalog.domain.service.CategoryNotFoundException;
-import edu.uoc.epcsd.productcatalog.domain.service.OfferService;
-import edu.uoc.epcsd.productcatalog.domain.service.ProductNotFoundException;
-import edu.uoc.epcsd.productcatalog.domain.service.UserNotFoundException;
+import edu.uoc.epcsd.productcatalog.domain.OfferStatus;
+import edu.uoc.epcsd.productcatalog.domain.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +50,6 @@ public class OfferRESTController {
             return ResponseEntity.created(uri).body(offerId);
         } catch (UserNotFoundException | CategoryNotFoundException | ProductNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The specified product category " + addOfferRequest.getCategoryId() + " does not exist.", e);
         }
     }
 
@@ -60,7 +57,29 @@ public class OfferRESTController {
     @ResponseStatus(HttpStatus.OK)
     public List<Offer> findOffersByUser(@RequestParam @NotNull String email) {
         log.trace("findOffersByUser");
-
         return offerService.findOffersByUser(email);
+    }
+
+    @PatchMapping("/{offerId}")
+    public ResponseEntity<OfferStatus> evaluateOffer(@PathVariable @NotNull Long offerId, @RequestBody @NotNull @Valid EvaluateOfferRequest evaluateOfferRequest) {
+        log.trace("evaluateOffer");
+        log.trace("Evaluating offer " + evaluateOfferRequest);
+
+        try {
+            Offer offer = offerService.evaluateOffer(
+                    offerId,
+                    evaluateOfferRequest.getDate(),
+                    evaluateOfferRequest.getStatus()
+            );
+
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{offerId}")
+                    .buildAndExpand(offerId)
+                    .toUri();
+
+            return ResponseEntity.created(uri).body(offer.getStatus());
+        } catch (OfferNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }

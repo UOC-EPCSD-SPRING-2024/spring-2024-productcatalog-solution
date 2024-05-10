@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,5 +40,18 @@ public class OfferRepositoryImpl implements OfferRepository {
     @Override
     public List<Offer> findOffersByUser(String email) {
         return jpaRepository.findOfferEntitiesByEmail(email).stream().map(OfferEntity::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Offer> findOfferById(Long id) {
+        return jpaRepository.findById(id).map(OfferEntity::toDomain);
+    }
+
+    @Override
+    public Offer save(Offer offer) {
+        OfferEntity offerEntity = OfferEntity.fromDomain(offer);
+        offerEntity.setCategory(jpaCategoryRepository.findById(offer.getCategoryId()).orElseThrow());
+        offerEntity.setProduct(jpaProductRepository.findById(offer.getProductId()).orElseThrow());
+        return jpaRepository.save(offerEntity).toDomain();
     }
 }

@@ -5,6 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @ToString
 @Getter
@@ -28,4 +29,8 @@ public class Offer {
 
     @NotBlank
     private String serialNumber;
+
+    private OfferStatus status;
+
+    private LocalDate date;
 }

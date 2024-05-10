@@ -2,17 +2,19 @@ package edu.uoc.epcsd.productcatalog.domain.service;
 
 import edu.uoc.epcsd.productcatalog.application.rest.response.GetUserResponse;
 import edu.uoc.epcsd.productcatalog.domain.Offer;
+import edu.uoc.epcsd.productcatalog.domain.OfferStatus;
 import edu.uoc.epcsd.productcatalog.domain.repository.OfferRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Log4j2
@@ -44,5 +46,13 @@ public class OfferServiceImpl implements OfferService {
 
     public List<Offer> findOffersByUser(String email) {
         return offerRepository.findOffersByUser(email);
+    }
+
+    public Offer evaluateOffer(Long id, LocalDate date, OfferStatus status) {
+        Offer offer = offerRepository.findOfferById(id).orElseThrow(() -> new OfferNotFoundException(id));
+        offer.setDate(date);
+        offer.setStatus(status);
+        offer = offerRepository.save(offer);
+        return offer;
     }
 }
