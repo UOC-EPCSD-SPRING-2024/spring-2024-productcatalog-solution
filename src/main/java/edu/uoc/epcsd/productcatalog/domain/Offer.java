@@ -30,7 +30,9 @@ public class Offer {
     @NotBlank
     private String serialNumber;
 
-    private OfferStatus status;
+    @NotNull
+    @Builder.Default
+    private OfferStatus status = OfferStatus.PENDING;
 
     private LocalDate date;
 }
