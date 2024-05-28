@@ -29,9 +29,11 @@ public class OfferServiceImpl implements OfferService {
 
     private final OfferRepository offerRepository;
 
+    private final RestTemplate restTemplate;
+
     public Long addOffer(Offer offer) {
         try {
-            ResponseEntity<GetUserResponse> response = new RestTemplate().
+            ResponseEntity<GetUserResponse> response = restTemplate.
                     getForEntity(getUserByEmail, GetUserResponse.class, offer.getEmail());
             if (!response.getStatusCode().is2xxSuccessful()) {
                 throw new RuntimeException("Could not fetch user with email " + offer.getEmail());
@@ -47,6 +49,18 @@ public class OfferServiceImpl implements OfferService {
     }
 
     public List<Offer> findOffersByUser(String email) {
+        try {
+            ResponseEntity<GetUserResponse> response = restTemplate.
+                    getForEntity(getUserByEmail, GetUserResponse.class, email);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Could not fetch user with email " + email);
+            }
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+                throw new UserNotFoundException(email);
+            }
+            throw new RuntimeException("Could not fetch user with email " + email);
+        }
         return offerRepository.findOffersByUser(email);
     }
 
