@@ -56,8 +56,12 @@ public class OfferRESTController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Offer> findOffersByUser(@RequestParam @NotNull String email) {
-        log.trace("findOffersByUser");
-        return offerService.findOffersByUser(email);
+        try {
+            log.trace("findOffersByUser");
+            return offerService.findOffersByUser(email);
+        } catch (UserNotFoundException | CategoryNotFoundException | ProductNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PatchMapping("/{offerId}")
